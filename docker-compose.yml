@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  romannumberconverter:
+    image: romannumberconverter
+    build:
+      context: .
+      dockerfile: ./Dockerfile
