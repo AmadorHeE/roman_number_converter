@@ -1,75 +1,52 @@
 package com.eamador;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class RomanNumberTest {
-    @Test
-    public void testGetDecimalFromRomanUpperCase() throws InvalidRomanNumberException {
+    @ParameterizedTest(name = "Roman number {0} = Arabic {1}")
+    @CsvSource({
+        "I, 1",
+        "IV, 4",
+        "V, 5",
+        "IX, 9",
+        "X, 10",
+        "XIV, 14",
+        "XX, 20",
+        "XL, 40",
+        "L, 50",
+        "LXII, 62",
+        "XC, 90",
+        "C, 100",
+        "CXX, 120",
+        "i, 1",
+        "iv, 4",
+        "v, 5",
+        "ix, 9",
+        "x, 10",
+        "xiv, 14",
+        "xx, 20",
+        "xl, 40",
+        "l, 50",
+        "lxii, 62",
+        "xc, 90",
+        "c, 100",
+        "cxx, 120",
+    })
+    public void testGetDecimalFromRomanUpperCase(String value, Integer expectedResult) throws IllegalArgumentException {
         RomanNumber romanNumber;
         
-        romanNumber = new RomanNumber("I");
-        Assert.assertEquals(1, romanNumber.getInteger());
-        romanNumber = new RomanNumber("IV");
-        Assert.assertEquals(4, romanNumber.getInteger());
-        romanNumber = new RomanNumber("V");
-        Assert.assertEquals(5, romanNumber.getInteger());
-        romanNumber = new RomanNumber("IX");
-        Assert.assertEquals(9, romanNumber.getInteger());
-        romanNumber = new RomanNumber("X");
-        Assert.assertEquals(10, romanNumber.getInteger());
-        romanNumber = new RomanNumber("XIV");
-        Assert.assertEquals(14, romanNumber.getInteger());
-        romanNumber = new RomanNumber("XX");
-        Assert.assertEquals(20, romanNumber.getInteger());
-        romanNumber = new RomanNumber("XL");
-        Assert.assertEquals(40, romanNumber.getInteger());
-        romanNumber = new RomanNumber("L");
-        Assert.assertEquals(50, romanNumber.getInteger());
-        romanNumber = new RomanNumber("LXII");
-        Assert.assertEquals(62, romanNumber.getInteger());
-        romanNumber = new RomanNumber("XC");
-        Assert.assertEquals(90, romanNumber.getInteger());
-        romanNumber = new RomanNumber("C");
-        Assert.assertEquals(100, romanNumber.getInteger());
-        romanNumber = new RomanNumber("CXX");
-        Assert.assertEquals(120, romanNumber.getInteger());
+        romanNumber = new RomanNumber(value);
+        assertEquals(expectedResult, romanNumber.getArabicNumber().getValue());
     }
 
     @Test
-    public void testGetDecimalFromRomanLowerCase() throws InvalidRomanNumberException {
-        RomanNumber romanNumber;
-        romanNumber = new RomanNumber("i");
-        Assert.assertEquals(1, romanNumber.getInteger());
-        romanNumber = new RomanNumber("iv");
-        Assert.assertEquals(4, romanNumber.getInteger());
-        romanNumber = new RomanNumber("v");
-        Assert.assertEquals(5, romanNumber.getInteger());
-        romanNumber = new RomanNumber("ix");
-        Assert.assertEquals(9, romanNumber.getInteger());
-        romanNumber = new RomanNumber("x");
-        Assert.assertEquals(10, romanNumber.getInteger());
-        romanNumber = new RomanNumber("xiv");
-        Assert.assertEquals(14, romanNumber.getInteger());
-        romanNumber = new RomanNumber("xx");
-        Assert.assertEquals(20, romanNumber.getInteger());
-        romanNumber = new RomanNumber("xl");
-        Assert.assertEquals(40, romanNumber.getInteger());
-        romanNumber = new RomanNumber("l");
-        Assert.assertEquals(50, romanNumber.getInteger());
-        romanNumber = new RomanNumber("lxii");
-        Assert.assertEquals(62, romanNumber.getInteger());
-        romanNumber = new RomanNumber("xc");
-        Assert.assertEquals(90, romanNumber.getInteger());
-        romanNumber = new RomanNumber("c");
-        Assert.assertEquals(100, romanNumber.getInteger());
-        romanNumber = new RomanNumber("cxx");
-        Assert.assertEquals(120, romanNumber.getInteger());
-    }
-
-    @Test(expected = InvalidRomanNumberException.class)
-    public void testInvalidRomanNumber() throws InvalidRomanNumberException {
-        RomanNumber romanNumber = new RomanNumber("invalid value");
-        romanNumber.getInteger();
+    public void testInvalidRomanNumber() throws IllegalArgumentException {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new RomanNumber("invalid value");
+        });
     }
 }

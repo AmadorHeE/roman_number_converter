@@ -3,28 +3,32 @@ package com.eamador;
 import java.util.HashMap;
 
 public class RomanNumber {
-    private static final HashMap<String, Integer> romanNumbers = new HashMap<>();
+    private static final HashMap<String, Integer> integers = new HashMap<>();
     private String value;
 
-    public RomanNumber(String value) throws InvalidRomanNumberException {
-        romanNumbers.put("I", 1);
-        romanNumbers.put("V", 5);
-        romanNumbers.put("X", 10);
-        romanNumbers.put("L", 50);
-        romanNumbers.put("C", 100);
-        romanNumbers.put("D", 500);
-        romanNumbers.put("M", 1000);
+    public RomanNumber(String value) throws IllegalArgumentException {
+        integers.put("I", 1);
+        integers.put("V", 5);
+        integers.put("X", 10);
+        integers.put("L", 50);
+        integers.put("C", 100);
+        integers.put("D", 500);
+        integers.put("M", 1000);
 
         value = value.toUpperCase();
 
         if (!value.matches("^[IVXLCDM]+$")) {
-            throw new InvalidRomanNumberException("Invalid roman number");
+            throw new IllegalArgumentException("Invalid roman number");
         }
 
         this.value = value;
     }
 
-    public int getInteger() {
+    public String getValue() {
+        return value;
+    }
+
+    public ArabicNumber getArabicNumber() {
         /**
          * Iterate from right to left (less to more significant)
          * let's keep track of the previous number, because
@@ -49,11 +53,12 @@ public class RomanNumber {
          * decimalValue = 47
          * 
          */
+        ArabicNumber arabicNumber = null;
         Integer integerValue = 0;
         Integer previous = 0;
         for (int i = value.length() - 1; i >= 0; i--) {
             Character currentChar = value.charAt(i);
-            Integer current = romanNumbers.get(String.valueOf(currentChar));
+            Integer current = integers.get(String.valueOf(currentChar));
             if (current < previous) {
                 integerValue -= current;
             } else {
@@ -61,6 +66,7 @@ public class RomanNumber {
             }
             previous = current;
         }
-        return integerValue;
+        arabicNumber = new ArabicNumber(integerValue);
+        return arabicNumber;
     }
 }
